@@ -18,7 +18,7 @@
 <script type="text/tpl" id="index">
 	<div ng-if="spiner">Laod users...</div>
 	<ul>
-    	<li ng-repeat="one in users">
+    	<li ng-repeat="one in users | orderBy:'-user.name.first'">
     	<img alt="{{one.user.name.first}}, {{one.user.name.last}}" ng-src="{{one.user.picture.thumbnail}}">
       		<span>{{one.user.name.first}}, {{one.user.name.last}} [{{one.user.username}}], [{{one.user.email}}]</span> {{parseDate(one.user.dob)}}
     	</li>

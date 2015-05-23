@@ -10,12 +10,18 @@
 			.when('/', {
 				template: getHtml('index'),
 				controller: 'mainController'
+			})
+			.when('/p:num', {
+				template: getHtml('index'),
+				controller: 'mainController'
 			});
 	});
 	
 	// mainController	
-	randomUser.controller('mainController', function($scope, $http) {
+	randomUser.controller('mainController', function($scope, $http, $routeParams) {
 		$scope.spiner = true;
+
+		console.log($routeParams.num);
 
 		// http://stackoverflow.com/a/6078873/3906986
 		$scope.parseDate = function timeConverter(UNIX_timestamp){
