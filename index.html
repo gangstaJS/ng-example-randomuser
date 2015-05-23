@@ -3,10 +3,11 @@
 <head>
 	<title>Ng example</title>
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
 </head>
-<body>
+<body ng-controller="mainController">
 
 <div id="app">
 	<div ng-view></div>
@@ -16,19 +17,39 @@
 <!-- Templates -->
 
 <script type="text/tpl" id="index">
-	<div ng-if="spiner">Laod users...</div>
-	<ul>
-    	<li ng-repeat="one in users | orderBy:'-user.name.first'">
-    	<img alt="{{one.user.name.first}}, {{one.user.name.last}}" ng-src="{{one.user.picture.thumbnail}}">
-      		<span>{{one.user.name.first}}, {{one.user.name.last}} [{{one.user.username}}], [{{one.user.email}}]</span> {{parseDate(one.user.dob)}}
-    	</li>
-  	</ul>
+	<div ng-if="spiner"><div id="spiner">Laod users...</div></div>
+
+	
+
+	<div ng-if="!spiner">
+		<div>
+			<a href="#{{page_prev}}" class="prev">prev page</a> <a href="#{{page_next}}" class="next">next page</a>
+		</div>
+
+		<table>
+			<tr>
+				<td>Photo</td>
+				<td>Name</td>
+				<td>Email</td>
+				<td>Username</td>
+				<td>Birthday</td>
+			</tr>
+		
+			<tr ng-repeat="user in users | orderBy:'-f_name'">
+				<td><img alt="{{user.f_name}}, {{user.l_name}}" ng-src="{{user.thumbnail}}"></td>
+				<td>{{user.f_name}}, {{user.l_name}}</td>
+				<td>user.email</td>
+				<td>user.username</td>
+				<td>{{parseDate(user.b_day)}}</td>
+			</tr>
+		</table>	
+
+	</div>
 </script>
-
-<!-- // -->
-
 
 
 <script src="js/app.js"></script>
+
+<!-- // -->
 </body>
 </html>

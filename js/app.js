@@ -2,6 +2,7 @@
 	'use strict';
 
 	var randomUser = angular.module('randomUser', ['ngRoute']);
+	var usersArr = [];
 
 	//--
 
@@ -9,19 +10,17 @@
 		$routeProvider
 			.when('/', {
 				template: getHtml('index'),
-				controller: 'mainController'
+				controller: 'pageController'
 			})
 			.when('/p:num', {
 				template: getHtml('index'),
-				controller: 'mainController'
+				controller: 'pageController'
 			});
 	});
 	
 	// mainController	
-	randomUser.controller('mainController', function($scope, $http, $routeParams) {
+	randomUser.controller('mainController', function($scope, $http) {
 		$scope.spiner = true;
-
-		console.log($routeParams.num);
 
 		// http://stackoverflow.com/a/6078873/3906986
 		$scope.parseDate = function timeConverter(UNIX_timestamp){
@@ -39,14 +38,42 @@
 
 		//--
 
-	    $http.get('http://api.randomuser.me/?results=100').then(function(res) {
-          $scope.users = res.data.results;    
-          $scope.spiner = false;           
+	    $http.get('http://api.randomuser.me/?results=100').then(function(res) {  
+          	$scope.spiner = false;
+
+          	angular.forEach(res.data.results, function(el, n){
+     			usersArr.push({
+     				f_name:    (el.user.name.first || 'none'),
+     				l_name:    (el.user.name.last || 'none'),
+     				username:  (el.user.username || 'none'),
+     				email:     (el.user.email || 'none'),
+     				thumbnail: (el.user.picture.thumbnail || 'img/def.jpg'),
+     				b_day: 	   (el.user.dob || 0)
+     			});
+			});
+
         });
 	});
 	
 	// -- end mainContriller
 
+	// mainController	
+	randomUser.controller('pageController', function($scope, $http, $routeParams) {
+		var page = $routeParams.num || 1;
+
+		$scope.users = usersArr.slice(0,4);
+		console.log(usersArr.slice(0,4));
+
+		var per_page = 5;
+		var pageCount = Math.floor(usersArr.length/5);
+
+		$scope.page_prev = 'p'+1;
+		$scope.page_next = 'p'+2;
+
+	});
+
+
+	// helpers func
 	function getHtml(id) {
 		return document.getElementById(id).innerHTML;
 	}
