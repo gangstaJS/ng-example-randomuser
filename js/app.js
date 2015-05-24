@@ -21,7 +21,7 @@
 	// mainController	
 	randomUser.controller('mainController', function($scope, $http) {
 		$scope.spiner = true;
-		
+
 
 		// http://stackoverflow.com/a/6078873/3906986
 		$scope.parseDate = function timeConverter(UNIX_timestamp){
@@ -57,6 +57,7 @@
 	});
 	
 	// -- end mainContriller
+	
 
 	// mainController	
 	randomUser.controller('pageController', function($scope, $http, $routeParams) {
