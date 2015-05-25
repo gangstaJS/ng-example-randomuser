@@ -6,6 +6,28 @@
 
 	//--
 
+	randomUser.service('Users', function($q, $http) {
+		var get = function() {
+    		var deferred = $q.defer();
+    		$http.get('http://api.randomuser.me/?results=100').then(function(res) {
+          		angular.forEach(res.data.results, function(el, n){
+     				usersArr.push({
+     					f_name:    (el.user.name.first || 'none'),
+     					l_name:    (el.user.name.last || 'none'),
+     					username:  (el.user.username || 'none'),
+     					email:     (el.user.email || 'none'),
+     					thumbnail: (el.user.picture.thumbnail || 'img/def.jpg'),
+     					b_day: 	   (el.user.dob || 0)
+     				});
+				});
+				deferred.resolve();
+          	});
+    		return deferred.promise;
+    	};
+
+	    return {get: get};
+	});
+
 	randomUser.config(function($routeProvider) {
 		$routeProvider
 			.when('/', {
@@ -14,7 +36,13 @@
 			})
 			.when('/p:num', {
 				template: getHtml('index'),
-				controller: 'pageController'
+				controller: 'pageController',
+				// resolve: {
+				// 	randomUser: function($q) {
+				// 		defer = $q.defer();
+				// 		return defer.promise;
+				// 	}
+				// }
 			});
 	});
 	
@@ -39,32 +67,31 @@
 
 		//--
 
-	    $http.get('http://api.randomuser.me/?results=100').then(function(res) {  
-          	$scope.spiner = false;
-
-          	angular.forEach(res.data.results, function(el, n){
-     			usersArr.push({
-     				f_name:    (el.user.name.first || 'none'),
-     				l_name:    (el.user.name.last || 'none'),
-     				username:  (el.user.username || 'none'),
-     				email:     (el.user.email || 'none'),
-     				thumbnail: (el.user.picture.thumbnail || 'img/def.jpg'),
-     				b_day: 	   (el.user.dob || 0)
-     			});
-			});
-
-        });
+	   
 	});
 	
 	// -- end mainContriller
-	
+
 
 	// mainController	
-	randomUser.controller('pageController', function($scope, $http, $routeParams) {
+	randomUser.controller('pageController', function($scope, $http, $routeParams, Users) {
 		var page = $routeParams.num || 1;
 
-		$scope.users = usersArr.slice(0,4);
-		console.log(usersArr.slice(0,4));
+		if(!usersArr.length) {
+			var promise = Users.get();
+
+			promise.then(function() {
+				$scope.spiner = false;
+				$scope.users = usersArr.slice(0,5);
+				console.log(usersArr.slice(0,5));
+			});
+		} else {
+			$scope.spiner = false;
+			$scope.users = usersArr.slice(0,5);
+		}
+
+		
+		console.log(page);
 
 		var per_page = 5;
 		var pageCount = Math.floor(usersArr.length/5);
