@@ -68,7 +68,7 @@
 	randomUser.controller('pageController', function($scope, $http, $routeParams, Users, $filter) {
 		var orderBy = $filter('orderBy');
 		var page = parseInt($routeParams.num) || 1;
-		var per_page = 5;
+		var per_page = 8;
 
 		// --
 
