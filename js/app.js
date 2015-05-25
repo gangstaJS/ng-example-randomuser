@@ -9,7 +9,7 @@
 	randomUser.service('Users', function($q, $http) {
 		var get = function() {
     		var deferred = $q.defer();
-    		$http.get('http://api.randomuser.me/?results=100').then(function(res) {
+    		$http.get('http://api.randomuser.me/?results=99').then(function(res) {
           		angular.forEach(res.data.results, function(el, n){
      				usersArr.push({
      					f_name:    (el.user.name.first || 'none'),
@@ -37,12 +37,6 @@
 			.when('/p:num', {
 				template: getHtml('index'),
 				controller: 'pageController',
-				// resolve: {
-				// 	randomUser: function($q) {
-				// 		defer = $q.defer();
-				// 		return defer.promise;
-				// 	}
-				// }
 			});
 	});
 	
@@ -65,39 +59,40 @@
 			return time;
 		};
 
-		//--
-
-	   
 	});
 	
 	// -- end mainContriller
 
 
-	// mainController	
+	// pageController	
 	randomUser.controller('pageController', function($scope, $http, $routeParams, Users) {
-		var page = $routeParams.num || 1;
+		var page = parseInt($routeParams.num) || 1;
+		var per_page = 5;
+
+		// --
 
 		if(!usersArr.length) {
 			var promise = Users.get();
 
 			promise.then(function() {
-				$scope.spiner = false;
-				$scope.users = usersArr.slice(0,5);
-				console.log(usersArr.slice(0,5));
+				getUsers(page, per_page);				
 			});
 		} else {
-			$scope.spiner = false;
-			$scope.users = usersArr.slice(0,5);
+			getUsers(page, per_page);
 		}
 
-		
-		console.log(page);
+		// --
 
-		var per_page = 5;
-		var pageCount = Math.floor(usersArr.length/5);
+		function getUsers(page, per_page) {
+			$scope.spiner = false;
+			var page_count = Math.round(usersArr.length/5);
+			var offset = (page-1)*per_page;
 
-		$scope.page_prev = 'p'+1;
-		$scope.page_next = 'p'+2;
+			$scope.users = usersArr.slice(offset,(offset+per_page));
+
+			$scope.page_prev = 'p'+(page == 1?page:page-1);
+			$scope.page_next = 'p'+(page >= page_count?page:page+1);
+		}
 
 	});
 
