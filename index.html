@@ -22,27 +22,38 @@
 	
 
 	<div ng-if="!spiner">
-		<div>
-			<a href="#{{page_prev}}" class="prev">prev page</a> <a href="#{{page_next}}" class="next">next page</a>
-		</div>
 
-		<table>
-			<tr>
-				<td>Photo</td>
-				<td>Name</td>
-				<td>Email</td>
-				<td>Username</td>
-				<td>Birthday</td>
-			</tr>
-		
-			<tr ng-repeat="user in users | orderBy:'-f_name'">
-				<td><img alt="{{user.f_name}}, {{user.l_name}}" ng-src="{{user.thumbnail}}"></td>
-				<td>{{user.f_name}}, {{user.l_name}}</td>
-				<td>user.email</td>
-				<td>user.username</td>
-				<td>{{parseDate(user.b_day)}}</td>
-			</tr>
-		</table>	
+	<div class="sort_all_bl">
+		<div>Sort all</div>
+		[<a href="" ng-click="orderAll('f_name',false)">Name</a> (<a href="" ng-click="orderAll('-f_name',false)">flip</a>)]
+		[<a href="" ng-click="orderAll('email',false)">Email</a> (<a href="" ng-click="orderAll('-email',false)">flip</a>)]
+		[<a href="" ng-click="orderAll('username',false)">Username</a> (<a href="" ng-click="orderAll('-username',false)">flip</a>)]
+		[<a href="" ng-click="orderAll('b_day',false)">Birthday</a> (<a href="" ng-click="orderAll('-b_day',false)">flip</a>)]	
+	</div>
+
+
+	<table>
+		<tr>
+			<td>Photo</td>
+			<td><a href="" ng-click="order('f_name',false)">Name</a> (<a href="" ng-click="order('-f_name',false)">flip</a>)</td>
+			<td><a href="" ng-click="order('email',false)">Email</a> (<a href="" ng-click="order('-email',false)">flip</a>)</td>
+			<td><a href="" ng-click="order('username',false)">Username</a> (<a href="" ng-click="order('-username',false)">flip</a>)</td>
+			<td><a href="" ng-click="order('b_day',false)">Birthday</a> (<a href="" ng-click="order('-b_day',false)">flip</a>)</td>
+		</tr>
+	
+		<tr ng-repeat="user in users">
+			<td><img alt="{{user.f_name}}, {{user.l_name}}" ng-src="{{user.thumbnail}}"></td>
+			<td>{{user.f_name}}, {{user.l_name}}</td>
+			<td>{{user.email}}</td>
+			<td>{{user.username}}</td>
+			<td>{{parseDate(user.b_day)}}</td>
+		</tr>
+	</table>
+
+		<div class="page_bl">
+			[<a href="#{{page_prev}}" class="prev">prev page</a>] [<a href="#{{page_next}}" class="next">next page</a>]<br>
+			<a href="https://github.com/gangstaJS/ng-example-randomuser" target="_blank">This example on GitHub</a>
+		</div>
 
 	</div>
 </script>

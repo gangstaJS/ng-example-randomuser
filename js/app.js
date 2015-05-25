@@ -65,7 +65,8 @@
 
 
 	// pageController	
-	randomUser.controller('pageController', function($scope, $http, $routeParams, Users) {
+	randomUser.controller('pageController', function($scope, $http, $routeParams, Users, $filter) {
+		var orderBy = $filter('orderBy');
 		var page = parseInt($routeParams.num) || 1;
 		var per_page = 5;
 
@@ -88,7 +89,20 @@
 			var page_count = Math.round(usersArr.length/5);
 			var offset = (page-1)*per_page;
 
+
+
 			$scope.users = usersArr.slice(offset,(offset+per_page));
+
+			$scope.order = function(predicate, reverse) {
+    			$scope.users = orderBy($scope.users, predicate, reverse);
+  			};
+
+  			$scope.orderAll = function(predicate, reverse) {
+    			usersArr = orderBy(usersArr, predicate, reverse);
+    			$scope.users = usersArr.slice(offset,(offset+per_page));
+  			};
+
+  			$scope.order('f_name',false);
 
 			$scope.page_prev = 'p'+(page == 1?page:page-1);
 			$scope.page_next = 'p'+(page >= page_count?page:page+1);

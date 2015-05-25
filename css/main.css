@@ -24,3 +24,13 @@ table tr:hover {
 	padding-top: 150px;
 	font-weight: bold;
 }
+
+.page_bl, .sort_all_bl {
+	text-align: center;
+	font-weight: bold;
+}
+
+.sort_all_bl {
+	border: 1px dashed #e1e1e1;
+	margin-bottom: 30px;
+}
