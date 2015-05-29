@@ -6,10 +6,9 @@
 
 	//--
 
-    randomUser.service('Users', function($q, $http) {
+    randomUser.service('Users', function($http) {
 		var get = function() {
-			var deferred = $q.defer();
-			$http.get('http://api.randomuser.me/?results=99').then(function(res) {
+			var promise = $http.get('http://api.randomuser.me/?results=99').then(function(res) {
 	      		angular.forEach(res.data.results, function(el, n){
 	 				usersArr.push({
 	 					f_name:    (el.user.name.first || 'none'),
@@ -20,9 +19,8 @@
 	 					b_day: 	   (el.user.dob || 0)
 	 				});
 				});
-				deferred.resolve();
 	      	});
-			return deferred.promise;
+			return promise;
 		};
 	
 	    return {get: get};
